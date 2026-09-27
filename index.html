@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlotillaPro - Sistema de Control Vehicular</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 1. PANTALLA DE INICIO DE SESIÓN (OVERLAY) -->
+<div id="login-overlay" class="login-overlay">
+    <div class="login-card">
+        <div class="brand">
+            <i class="fa-solid fa-car-side brand-icon"></i>
+            <h2>Flotilla<span>Pro</span></h2>
+        </div>
+        <p class="login-subtitle">Acceso restringido al personal autorizado</p>
+        
+        <form id="form-login" class="form-grid">
+            <div class="form-group">
+                <label for="login-user">Usuario</label>
+                <input type="text" id="login-user" placeholder="admin" required>
+            </div>
+            <div class="form-group">
+                <label for="login-pass">Contraseña</label>
+                <input type="password" id="login-pass" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary full-width">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+            </button>
+        </form>
+
+        <div class="login-demo-info">
+            <small><i class="fa-solid fa-key"></i> Credenciales Demo:<br>Usuario: <strong>admin</strong> | Clave: <strong>123456</strong></small>
+        </div>
+    </div>
+</div>
+
+<!-- Reemplaza tu div.user-profile en el sidebar por este para incluir el botón de Salir: -->
+<div class="user-profile">
+    <div class="avatar">FP</div>
+    <div class="user-info">
+        <span class="user-name">Administrador</span>
+        <span class="user-role">Mérida, Yucatán</span>
+    </div>
+    <button id="btn-logout" class="btn-icon-logout" title="Cerrar Sesión">
+        <i class="fa-solid fa-power-off"></i>
+    </button>
+</div>
+
+    <div class="app-container">
+        <!-- BARRA LATERAL (MENÚ EXACTO DE TU IMAGEN) -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-car-side brand-icon"></i>
+                <h2>Flotilla<span>Pro</span></h2>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="sec-panel">
+                    <i class="fa-solid fa-chart-pie"></i> Panel de Control
+                </a>
+                <a href="#" class="nav-item" data-target="sec-autos">
+                    <i class="fa-solid fa-car"></i> Inventario de Autos
+                </a>
+                <a href="#" class="nav-item" data-target="sec-conductores">
+                    <i class="fa-solid fa-users"></i> Conductores
+                </a>
+                <a href="#" class="nav-item" data-target="sec-prestamos">
+                    <i class="fa-solid fa-key"></i> Préstamos y Salidas
+                </a>
+                <a href="#" class="nav-item" data-target="sec-mantenimiento">
+                    <i class="fa-solid fa-wrench"></i> Mantenimiento
+                </a>
+                <a href="#" class="nav-item" data-target="sec-gastos">
+                    <i class="fa-solid fa-gas-pump"></i> Combustible y Gastos
+                </a>
+            </nav>
+
+            <div class="user-profile">
+                <div class="avatar">FP</div>
+                <div class="user-info">
+                    <span class="user-name">Administrador</span>
+                    <span class="user-role">Mérida, Yucatán</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            
+            <!-- 1. PANEL DE CONTROL -->
+            <section id="sec-panel" class="app-section active">
+                <header class="top-header">
+                    <h1>Panel de Control</h1>
+                    <p class="subtitle">Resumen general y métricas de la flotilla vehicular</p>
+                </header>
+
+                <div class="metrics-grid">
+                    <div class="card metric-card">
+                        <div class="metric-icon bg-blue"><i class="fa-solid fa-car"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">Total Flotilla</span>
+                            <h3 id="metric-total">0</h3>
+                        </div>
+                    </div>
+                    <div class="card metric-card">
+                        <div class="metric-icon bg-green"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">Disponibles</span>
+                            <h3 id="metric-disponibles">0</h3>
+                        </div>
+                    </div>
+                    <div class="card metric-card">
+                        <div class="metric-icon bg-orange"><i class="fa-solid fa-route"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">En Ruta</span>
+                            <h3 id="metric-en-ruta">0</h3>
+                        </div>
+                    </div>
+                    <div class="card metric-card">
+                        <div class="metric-icon bg-red"><i class="fa-solid fa-wrench"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-title">En Mantenimiento</span>
+                            <h3 id="metric-mantenimiento">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card margin-top">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-list"></i> Estado Actual de la Flotilla</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Placa</th>
+                                    <th>Vehículo</th>
+                                    <th>Kilometraje</th>
+                                    <th>Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-panel-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. INVENTARIO DE AUTOS -->
+            <section id="sec-autos" class="app-section">
+                <header class="top-header">
+                    <h1>Inventario de Autos</h1>
+                    <p class="subtitle">Registro, alta y baja de vehículos en el sistema</p>
+                </header>
+
+                <div class="grid-2-cols">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-car-tunnel"></i> Registrar Nuevo Vehículo</h3>
+                        </div>
+                        <form id="form-vehiculo" class="form-grid">
+                            <div class="form-group">
+                                <label for="placa">Placa (Yucatán)</label>
+                                <input type="text" id="placa" placeholder="Ej. YWZ-123-A" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca">Marca</label>
+                                <input type="text" id="marca" placeholder="Ej. Nissan" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="modelo">Modelo</label>
+                                <input type="text" id="modelo" placeholder="Ej. NP300" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="anio">Año</label>
+                                <input type="number" id="anio" value="2023" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="km">Kilometraje Inicial</label>
+                                <input type="number" id="km" placeholder="Ej. 15000" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary full-width">Guardar Vehículo</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-warehouse"></i> Catálogo Completo</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Placa</th>
+                                        <th>Vehículo</th>
+                                        <th>KM</th>
+                                        <th>Estatus</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-vehiculos-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. CONDUCTORES -->
+            <section id="sec-conductores" class="app-section">
+                <header class="top-header">
+                    <h1>Conductores Autorizados</h1>
+                    <p class="subtitle">Gestión del personal habilitado para operar vehículos</p>
+                </header>
+
+                <div class="grid-2-cols">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-user-plus"></i> Registrar Conductor</h3>
+                        </div>
+                        <form id="form-conductor" class="form-grid">
+                            <div class="form-group">
+                                <label for="cond-nombre">Nombre Completo</label>
+                                <input type="text" id="cond-nombre" placeholder="Ej. Alejandro Pech" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cond-depto">Departamento</label>
+                                <input type="text" id="cond-depto" placeholder="Ej. Logística y Ventas" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cond-licencia">No. de Licencia</label>
+                                <input type="text" id="cond-licencia" placeholder="Ej. YUC-982341" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary full-width">Registrar Conductor</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-id-card"></i> Lista de Choferes</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Área</th>
+                                        <th>Licencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-conductores-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. PRÉSTAMOS Y SALIDAS (AQUÍ OPERA INTERNAMENTE EL ALGORITMO COLA) -->
+            <section id="sec-prestamos" class="app-section">
+                <header class="top-header">
+                    <h1>Préstamos y Salidas</h1>
+                    <p class="subtitle">Solicitudes en cola de espera y asignación de vehículos</p>
+                </header>
+
+                <div class="grid-2-cols">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-paper-plane"></i> Nueva Solicitud de Salida</h3>
+                        </div>
+                        <form id="form-solicitud" class="form-grid">
+                            <div class="form-group">
+                                <label for="sol-empleado">Seleccionar Conductor</label>
+                                <select id="sol-empleado" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sol-tipo">Tipo de Vehículo Requerido</label>
+                                <select id="sol-tipo" required>
+                                    <option value="Cualquiera Disponible">Cualquiera Disponible</option>
+                                    <option value="Pick-Up / Camioneta">Pick-Up / Camioneta</option>
+                                    <option value="Sedán / Automóvil">Sedán / Automóvil</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sol-destino">Destino / Motivo</label>
+                                <input type="text" id="sol-destino" placeholder="Ej. Zona Industrial Kanasín" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary full-width">Enviar a Solicitudes Pendientes</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header flex-between">
+                            <h3><i class="fa-solid fa-clock"></i> Solicitudes en Espera</h3>
+                            <button class="btn btn-success" onclick="atenderSiguienteSolicitud()">
+                                <i class="fa-solid fa-key"></i> Asignar Auto
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Turno</th>
+                                        <th>Empleado</th>
+                                        <th>Destino</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-cola-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. MANTENIMIENTO -->
+            <section id="sec-mantenimiento" class="app-section">
+                <header class="top-header">
+                    <h1>Mantenimiento Preventivo y Correctivo</h1>
+                    <p class="subtitle">Bitácora de talleres, servicios mecánicos y reparaciones</p>
+                </header>
+
+                <div class="grid-2-cols">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-toolbox"></i> Registrar Servicio</h3>
+                        </div>
+                        <form id="form-mantenimiento" class="form-grid">
+                            <div class="form-group">
+                                <label for="mant-placa">Vehículo</label>
+                                <select id="mant-placa" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mant-servicio">Tipo de Servicio</label>
+                                <input type="text" id="mant-servicio" placeholder="Ej. Cambio de Aceite 10,000 km" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mant-costo">Costo ($ MXN)</label>
+                                <input type="number" id="mant-costo" placeholder="Ej. 1850" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary full-width">Enviar a Taller</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-file-invoice"></i> Historial de Servicios</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Placa</th>
+                                        <th>Servicio</th>
+                                        <th>Costo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-mantenimiento-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. COMBUSTIBLE Y GASTOS -->
+            <section id="sec-gastos" class="app-section">
+                <header class="top-header">
+                    <h1>Combustible y Gastos</h1>
+                    <p class="subtitle">Control financiero de recargas de gasolina y casetas</p>
+                </header>
+
+                <div class="grid-2-cols">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-receipt"></i> Registrar Carga / Gasto</h3>
+                        </div>
+                        <form id="form-gasto" class="form-grid">
+                            <div class="form-group">
+                                <label for="gasto-placa">Vehículo</label>
+                                <select id="gasto-placa" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="gasto-litros">Litros Cargados</label>
+                                <input type="number" id="gasto-litros" placeholder="Ej. 40" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gasto-monto">Monto Total ($ MXN)</label>
+                                <input type="number" id="gasto-monto" placeholder="Ej. 980" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary full-width">Registrar Ticket</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-line"></i> Bitácora de Gasolina</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Placa</th>
+                                        <th>Litros</th>
+                                        <th>Monto</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-gastos-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
